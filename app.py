@@ -34,7 +34,7 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(4, 4))  # Balanced size
+    fig, ax = plt.subplots(figsize=(4, 4))
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')
     st.pyplot(fig)
@@ -46,7 +46,7 @@ st.markdown("<h1 style='text-align: center;'>💸 Financial Calculator</h1>", un
 
 calc_type = st.radio("Choose Calculator", ["SIP", "SWP", "Lump Sum"], horizontal=True)
 
-left, right = st.columns([1, 1])  # Equal width layout
+left, right = st.columns([1, 1], gap="large")
 
 # ------------------ SIP ------------------
 if calc_type == "SIP":
@@ -57,12 +57,14 @@ if calc_type == "SIP":
         years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
         calculate = st.button("Calculate SIP")
 
-    if calculate:
-        invested, returns, total = calculate_sip(mi, rate, years)
-        with right:
-            st.subheader("📊 SIP Breakdown")
+    with right:
+        st.subheader("📊 SIP Breakdown")
+        if calculate:
+            invested, returns, total = calculate_sip(mi, rate, years)
             pie_chart(["Invested", "Returns"], [invested, returns])
+            st.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
 
+    if calculate:
         st.markdown("### 📋 Results Summary")
         df = pd.DataFrame({
             "Description": [
@@ -73,7 +75,14 @@ if calc_type == "SIP":
                 "Returns Earned (₹)",
                 "Total Value (₹)"
             ],
-            "Value": [f"{mi:.2f}", f"{rate:.2f}", f"{years:.2f}", f"{invested:.2f}", f"{returns:.2f}", f"{total:.2f}"]
+            "Value": [
+                f"{mi:,.2f}",
+                f"{rate:,.2f}",
+                f"{years:,.2f}",
+                f"{invested:,.0f}",
+                f"{returns:,.0f}",
+                f"{total:,.0f}"
+            ]
         })
         st.table(df)
 
@@ -87,12 +96,14 @@ elif calc_type == "SWP":
         years = st.number_input("Withdrawal Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
         calculate = st.button("Calculate SWP")
 
-    if calculate:
-        withdrawn, balance = calculate_swp(ia, mw, rate, years)
-        with right:
-            st.subheader("📊 SWP Breakdown")
+    with right:
+        st.subheader("📊 SWP Breakdown")
+        if calculate:
+            withdrawn, balance = calculate_swp(ia, mw, rate, years)
             pie_chart(["Withdrawn", "Remaining"], [withdrawn, balance])
+            st.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
 
+    if calculate:
         st.markdown("### 📋 Results Summary")
         df = pd.DataFrame({
             "Description": [
@@ -103,7 +114,14 @@ elif calc_type == "SWP":
                 "Total Withdrawn (₹)",
                 "Remaining Balance (₹)"
             ],
-            "Value": [f"{ia:.2f}", f"{mw:.2f}", f"{rate:.2f}", f"{years:.2f}", f"{withdrawn:.2f}", f"{balance:.2f}"]
+            "Value": [
+                f"{ia:,.2f}",
+                f"{mw:,.2f}",
+                f"{rate:,.2f}",
+                f"{years:,.2f}",
+                f"{withdrawn:,.0f}",
+                f"{balance:,.0f}"
+            ]
         })
         st.table(df)
 
@@ -116,12 +134,14 @@ else:
         years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
         calculate = st.button("Calculate Lump Sum")
 
-    if calculate:
-        invested, returns, total = calculate_lump_sum(principal, rate, years)
-        with right:
-            st.subheader("📊 Lump Sum Breakdown")
+    with right:
+        st.subheader("📊 Lump Sum Breakdown")
+        if calculate:
+            invested, returns, total = calculate_lump_sum(principal, rate, years)
             pie_chart(["Invested", "Returns"], [invested, returns])
+            st.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
 
+    if calculate:
         st.markdown("### 📋 Results Summary")
         df = pd.DataFrame({
             "Description": [
@@ -132,7 +152,14 @@ else:
                 "Returns Earned (₹)",
                 "Total Value (₹)"
             ],
-            "Value": [f"{principal:.2f}", f"{rate:.2f}", f"{years:.2f}", f"{invested:.2f}", f"{returns:.2f}", f"{total:.2f}"]
+            "Value": [
+                f"{principal:,.2f}",
+                f"{rate:,.2f}",
+                f"{years:,.2f}",
+                f"{invested:,.0f}",
+                f"{returns:,.0f}",
+                f"{total:,.0f}"
+            ]
         })
         st.table(df)
 
