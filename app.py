@@ -60,11 +60,12 @@ if calc_type == "SIP":
     with right:
         st.subheader("📊 SIP Breakdown")
         if calculate:
-            invested, returns, total = calculate_sip(mi, rate, years)
-            pie_chart(["Invested", "Returns"], [invested, returns])
-            st.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
+            with st.container():
+                pie_chart(["Invested", "Returns"], calculate_sip(mi, rate, years)[:2])
+                st.markdown("<div style='height: 180px;'></div>", unsafe_allow_html=True)
 
     if calculate:
+        invested, returns, total = calculate_sip(mi, rate, years)
         st.markdown("### 📋 Results Summary")
         df = pd.DataFrame({
             "Description": [
@@ -101,7 +102,7 @@ elif calc_type == "SWP":
         if calculate:
             withdrawn, balance = calculate_swp(ia, mw, rate, years)
             pie_chart(["Withdrawn", "Remaining"], [withdrawn, balance])
-            st.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
+            st.markdown("<div style='height: 180px;'></div>", unsafe_allow_html=True)
 
     if calculate:
         st.markdown("### 📋 Results Summary")
@@ -139,7 +140,7 @@ else:
         if calculate:
             invested, returns, total = calculate_lump_sum(principal, rate, years)
             pie_chart(["Invested", "Returns"], [invested, returns])
-            st.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
+            st.markdown("<div style='height: 180px;'></div>", unsafe_allow_html=True)
 
     if calculate:
         st.markdown("### 📋 Results Summary")
