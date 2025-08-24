@@ -34,7 +34,7 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(5, 5))  # Bigger chart
+    fig, ax = plt.subplots(figsize=(1.5, 1.5))  # Smaller chart
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')
     st.pyplot(fig)
@@ -43,24 +43,16 @@ def pie_chart(labels, values):
 
 st.set_page_config(page_title="Financial Calculator", layout="wide")
 
-# Inject CSS for layout
+# Inject CSS for equal-height columns
 st.markdown("""
     <style>
-    .flex-container {
+    .equal-height {
         display: flex;
+        align-items: stretch;
         gap: 2rem;
-        margin-top: 20px;
     }
-    .flex-child {
+    .equal-height > div {
         flex: 1;
-        min-height: 500px;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        border: 1px solid #ddd;
-    }
-    .bottom-table {
-        margin-top: 40px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -69,116 +61,130 @@ st.markdown("<h1 style='text-align: center;'>💸 Financial Calculator</h1>", un
 
 calc_type = st.radio("Choose Calculator", ["SIP", "SWP", "Lump Sum"], horizontal=True)
 
-# Begin layout
-st.markdown('<div class="flex-container">', unsafe_allow_html=True)
+# Begin equal-height layout
+st.markdown('<div class="equal-height">', unsafe_allow_html=True)
+left, right = st.columns(2)
 
-# Left: Inputs
-st.markdown('<div class="flex-child">', unsafe_allow_html=True)
-st.subheader("📈 Enter Your Details")
-
-calculate = False
+# ------------------ SIP ------------------
 if calc_type == "SIP":
-    mi = st.number_input("Monthly Investment (₹)", min_value=0.0, step=0.01, format="%.2f")
-    rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f")
-    years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
-    calculate = st.button("Calculate SIP")
+    with left:
+        st.subheader("📈 SIP Calculator")
+        mi = st.number_input("Monthly Investment (₹)", min_value=0.0, step=0.01, format="%.2f")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f")
+        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
+        calculate = st.button("Calculate SIP")
 
-elif calc_type == "SWP":
-    ia = st.number_input("Initial Investment (₹)", min_value=0.0, step=0.01, format="%.2f")
-    mw = st.number_input("Monthly Withdrawal (₹)", min_value=0.0, step=0.01, format="%.2f")
-    rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f")
-    years = st.number_input("Withdrawal Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
-    calculate = st.button("Calculate SWP")
+    with right:
+        st.subheader("📊 SIP Breakdown")
+        chart_placeholder = st.empty()
+        if calculate:
+            invested, returns, total = calculate_sip(mi, rate, years)
+            with chart_placeholder:
+                pie_chart(["Invested", "Returns"], [invested, returns])
 
-else:
-    principal = st.number_input("Principal Amount (₹)", min_value=0.0, step=0.01, format="%.2f")
-    rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f")
-    years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
-    calculate = st.button("Calculate Lump Sum")
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Right: Chart
-st.markdown('<div class="flex-child">', unsafe_allow_html=True)
-st.subheader("📊 Investment Breakdown")
-
-if calculate:
-    if calc_type == "SIP":
-        invested, returns, total = calculate_sip(mi, rate, years)
-        pie_chart(["Invested", "Returns"], [invested, returns])
-    elif calc_type == "SWP":
-        withdrawn, balance = calculate_swp(ia, mw, rate, years)
-        pie_chart(["Withdrawn", "Remaining"], [withdrawn, balance])
-    else:
-        invested, returns, total = calculate_lump_sum(principal, rate, years)
-        pie_chart(["Invested", "Returns"], [invested, returns])
-else:
-    st.markdown("Pie chart will appear here after calculation.")
-
-st.markdown('</div>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Bottom: Results Table
-if calculate:
-    st.markdown('<div class="bottom-table">', unsafe_allow_html=True)
-    st.markdown("### 📋 Results Summary")
-
-    if calc_type == "SIP":
+    if calculate:
+        st.markdown("### 📋 Results Summary")
         df = pd.DataFrame({
             "Description": [
                 "Monthly Investment (₹)",
                 "Expected Annual Return (%)",
                 "Investment Duration (Years)",
                 "Total Invested (₹)",
-                "Returns Earned (₹)"
+                "Returns Earned (₹)",
+                "Total Value (₹)"
             ],
             "Value": [
                 f"{mi:,.2f}",
                 f"{rate:,.2f}",
                 f"{years:,.2f}",
                 f"{invested:,.0f}",
-                f"{returns:,.0f}"
+                f"{returns:,.0f}",
+                f"{total:,.0f}"
             ]
         })
+        st.table(df)
 
-    elif calc_type == "SWP":
+# ------------------ SWP ------------------
+elif calc_type == "SWP":
+    with left:
+        st.subheader("📉 SWP Calculator")
+        ia = st.number_input("Initial Investment (₹)", min_value=0.0, step=0.01, format="%.2f")
+        mw = st.number_input("Monthly Withdrawal (₹)", min_value=0.0, step=0.01, format="%.2f")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f")
+        years = st.number_input("Withdrawal Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
+        calculate = st.button("Calculate SWP")
+
+    with right:
+        st.subheader("📊 SWP Breakdown")
+        chart_placeholder = st.empty()
+        if calculate:
+            withdrawn, balance = calculate_swp(ia, mw, rate, years)
+            with chart_placeholder:
+                pie_chart(["Withdrawn", "Remaining"], [withdrawn, balance])
+
+    if calculate:
+        st.markdown("### 📋 Results Summary")
         df = pd.DataFrame({
             "Description": [
                 "Initial Investment (₹)",
                 "Monthly Withdrawal (₹)",
                 "Expected Annual Return (%)",
                 "Withdrawal Duration (Years)",
-                "Total Withdrawn (₹)"
+                "Total Withdrawn (₹)",
+                "Remaining Balance (₹)"
             ],
             "Value": [
                 f"{ia:,.2f}",
                 f"{mw:,.2f}",
                 f"{rate:,.2f}",
                 f"{years:,.2f}",
-                f"{withdrawn:,.0f}"
+                f"{withdrawn:,.0f}",
+                f"{balance:,.0f}"
             ]
         })
+        st.table(df)
 
-    else:
+# ------------------ Lump Sum ------------------
+else:
+    with left:
+        st.subheader("💼 Lump Sum Calculator")
+        principal = st.number_input("Principal Amount (₹)", min_value=0.0, step=0.01, format="%.2f")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f")
+        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
+        calculate = st.button("Calculate Lump Sum")
+
+    with right:
+        st.subheader("📊 Lump Sum Breakdown")
+        chart_placeholder = st.empty()
+        if calculate:
+            invested, returns, total = calculate_lump_sum(principal, rate, years)
+            with chart_placeholder:
+                pie_chart(["Invested", "Returns"], [invested, returns])
+
+    if calculate:
+        st.markdown("### 📋 Results Summary")
         df = pd.DataFrame({
             "Description": [
                 "Principal Amount (₹)",
                 "Expected Annual Return (%)",
                 "Investment Duration (Years)",
                 "Total Invested (₹)",
-                "Returns Earned (₹)"
+                "Returns Earned (₹)",
+                "Total Value (₹)"
             ],
             "Value": [
                 f"{principal:,.2f}",
                 f"{rate:,.2f}",
                 f"{years:,.2f}",
                 f"{invested:,.0f}",
-                f"{returns:,.0f}"
+                f"{returns:,.0f}",
+                f"{total:,.0f}"
             ]
         })
+        st.table(df)
 
-    st.table(df)
-    st.markdown('</div>', unsafe_allow_html=True)
+# End equal-height layout
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
