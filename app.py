@@ -34,7 +34,7 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(1, 1))  # Smaller chart
+    fig, ax = plt.subplots(figsize=(0.8, 0.8))  # Smaller chart
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')
     st.pyplot(fig)
@@ -189,4 +189,5 @@ st.markdown('</div>', unsafe_allow_html=True)
 # Footer
 st.markdown("---")
 st.caption("Built with ❤️ by BusyBeingMe")
+
 
