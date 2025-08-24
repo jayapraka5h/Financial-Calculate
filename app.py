@@ -42,11 +42,28 @@ def pie_chart(labels, values):
 # ------------------ Streamlit UI ------------------
 
 st.set_page_config(page_title="Financial Calculator", layout="wide")
+
+# Inject CSS for equal-height columns
+st.markdown("""
+    <style>
+    .equal-height {
+        display: flex;
+        align-items: stretch;
+        gap: 2rem;
+    }
+    .equal-height > div {
+        flex: 1;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 st.markdown("<h1 style='text-align: center;'>💸 Financial Calculator</h1>", unsafe_allow_html=True)
 
 calc_type = st.radio("Choose Calculator", ["SIP", "SWP", "Lump Sum"], horizontal=True)
 
-left, right = st.columns([1, 1], gap="large")
+# Begin equal-height layout
+st.markdown('<div class="equal-height">', unsafe_allow_html=True)
+left, right = st.columns(2)
 
 # ------------------ SIP ------------------
 if calc_type == "SIP":
@@ -159,6 +176,9 @@ else:
             ]
         })
         st.table(df)
+
+# End equal-height layout
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
