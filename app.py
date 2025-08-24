@@ -34,7 +34,7 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(3, 3))  # Reduced size
+    fig, ax = plt.subplots(figsize=(3, 3))  # Smaller chart
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')
     st.pyplot(fig)
@@ -76,9 +76,11 @@ if calc_type == "SIP":
 
     with right:
         st.subheader("📊 SIP Breakdown")
+        chart_placeholder = st.empty()
         if calculate:
             invested, returns, total = calculate_sip(mi, rate, years)
-            pie_chart(["Invested", "Returns"], [invested, returns])
+            with chart_placeholder:
+                pie_chart(["Invested", "Returns"], [invested, returns])
 
     if calculate:
         st.markdown("### 📋 Results Summary")
@@ -114,9 +116,11 @@ elif calc_type == "SWP":
 
     with right:
         st.subheader("📊 SWP Breakdown")
+        chart_placeholder = st.empty()
         if calculate:
             withdrawn, balance = calculate_swp(ia, mw, rate, years)
-            pie_chart(["Withdrawn", "Remaining"], [withdrawn, balance])
+            with chart_placeholder:
+                pie_chart(["Withdrawn", "Remaining"], [withdrawn, balance])
 
     if calculate:
         st.markdown("### 📋 Results Summary")
@@ -151,9 +155,11 @@ else:
 
     with right:
         st.subheader("📊 Lump Sum Breakdown")
+        chart_placeholder = st.empty()
         if calculate:
             invested, returns, total = calculate_lump_sum(principal, rate, years)
-            pie_chart(["Invested", "Returns"], [invested, returns])
+            with chart_placeholder:
+                pie_chart(["Invested", "Returns"], [invested, returns])
 
     if calculate:
         st.markdown("### 📋 Results Summary")
