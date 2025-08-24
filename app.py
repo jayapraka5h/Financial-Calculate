@@ -31,25 +31,37 @@ def calculate_lump_sum(principal, annual_rate, years):
     returns = future_value - principal
     return round(principal, 2), round(returns, 2), round(future_value, 2)
 
-# ------------------ Chart Generator ------------------
+# ------------------ Advanced Pie Chart ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(0.8, 0.8))  # Compact chart size
+    fig, ax = plt.subplots(figsize=(0.8, 0.8))  # Compact chart
+
+    colors = ['#4CAF50', '#FFC107']  # Invested = green, Returns = amber
 
     wedges, texts, autotexts = ax.pie(
         values,
         labels=labels,
         autopct='%1.1f%%',
         startangle=90,
-        textprops={'fontsize': 8},       # Controls label font size
-        pctdistance=0.3                   # Moves percentage labels inward
+        colors=colors,
+        shadow=True,
+        textprops={'fontsize': 8},
+        pctdistance=0.55,
+        labeldistance=0.4
     )
 
-    # Optional: fine-tune font size manually
     for text in texts:
-        text.set_fontsize(8)             # Label font size
+        text.set_fontsize(8)
     for autotext in autotexts:
-        autotext.set_fontsize(3)         # Percentage font size
+        autotext.set_fontsize(8)
+
+    # Donut-style center
+    centre_circle = plt.Circle((0, 0), 0.50, fc='white')
+    fig.gca().add_artist(centre_circle)
+
+    # Center label showing total
+    total = sum(values)
+    ax.text(0, 0, f"₹{total:,.0f}", ha='center', va='center', fontsize=9, weight='bold')
 
     ax.axis('equal')
     st.pyplot(fig)
@@ -204,5 +216,3 @@ st.markdown('</div>', unsafe_allow_html=True)
 # Footer
 st.markdown("---")
 st.caption("Built with ❤️ by BusyBeingMe")
-
-
