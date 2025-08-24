@@ -34,36 +34,21 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(3, 3))  # Smaller chart
+    fig, ax = plt.subplots(figsize=(4, 4))  # balanced size
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
-    ax.axis('equal')
+    ax.axis('equal')  # keep circle shape
     st.pyplot(fig)
 
 # ------------------ Streamlit UI ------------------
 
 st.set_page_config(page_title="Financial Calculator", layout="wide")
 
-# Inject CSS for equal-height columns
-st.markdown("""
-    <style>
-    .equal-height {
-        display: flex;
-        align-items: stretch;
-        gap: 2rem;
-    }
-    .equal-height > div {
-        flex: 1;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
 st.markdown("<h1 style='text-align: center;'>💸 Financial Calculator</h1>", unsafe_allow_html=True)
 
 calc_type = st.radio("Choose Calculator", ["SIP", "SWP", "Lump Sum"], horizontal=True)
 
-# Begin equal-height layout
-st.markdown('<div class="equal-height">', unsafe_allow_html=True)
-left, right = st.columns(2)
+# Equal-width, vertically aligned columns
+left, right = st.columns([1, 1], vertical_alignment="center")
 
 # ------------------ SIP ------------------
 if calc_type == "SIP":
@@ -76,11 +61,9 @@ if calc_type == "SIP":
 
     with right:
         st.subheader("📊 SIP Breakdown")
-        chart_placeholder = st.empty()
         if calculate:
             invested, returns, total = calculate_sip(mi, rate, years)
-            with chart_placeholder:
-                pie_chart(["Invested", "Returns"], [invested, returns])
+            pie_chart(["Invested", "Returns"], [invested, returns])
 
     if calculate:
         st.markdown("### 📋 Results Summary")
@@ -116,11 +99,9 @@ elif calc_type == "SWP":
 
     with right:
         st.subheader("📊 SWP Breakdown")
-        chart_placeholder = st.empty()
         if calculate:
             withdrawn, balance = calculate_swp(ia, mw, rate, years)
-            with chart_placeholder:
-                pie_chart(["Withdrawn", "Remaining"], [withdrawn, balance])
+            pie_chart(["Withdrawn", "Remaining"], [withdrawn, balance])
 
     if calculate:
         st.markdown("### 📋 Results Summary")
@@ -155,11 +136,9 @@ else:
 
     with right:
         st.subheader("📊 Lump Sum Breakdown")
-        chart_placeholder = st.empty()
         if calculate:
             invested, returns, total = calculate_lump_sum(principal, rate, years)
-            with chart_placeholder:
-                pie_chart(["Invested", "Returns"], [invested, returns])
+            pie_chart(["Invested", "Returns"], [invested, returns])
 
     if calculate:
         st.markdown("### 📋 Results Summary")
@@ -183,9 +162,6 @@ else:
         })
         st.table(df)
 
-# End equal-height layout
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Footer
+# ------------------ Footer ------------------
 st.markdown("---")
 st.caption("Built with ❤️ by BusyBeingMe")
