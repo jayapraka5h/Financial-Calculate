@@ -34,19 +34,23 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(0.8, 0.8))  # Compact chart
+    fig, ax = plt.subplots(figsize=(0.8, 0.8))  # Compact chart size
+
     wedges, texts, autotexts = ax.pie(
         values,
         labels=labels,
         autopct='%1.1f%%',
         startangle=90,
-        textprops={'fontsize': 10},
-        pctdistance=0.6
+        textprops={'fontsize': 12},       # Controls label font size
+        pctdistance=0.6                   # Moves percentage labels inward
     )
+
+    # Optional: fine-tune font size manually
     for text in texts:
-        text.set_fontsize(10)
+        text.set_fontsize(12)             # Label font size
     for autotext in autotexts:
-        autotext.set_fontsize(10)
+        autotext.set_fontsize(12)         # Percentage font size
+
     ax.axis('equal')
     st.pyplot(fig)
 
@@ -200,3 +204,4 @@ st.markdown('</div>', unsafe_allow_html=True)
 # Footer
 st.markdown("---")
 st.caption("Built with ❤️ by BusyBeingMe")
+
