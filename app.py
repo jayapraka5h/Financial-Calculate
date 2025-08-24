@@ -34,8 +34,16 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(1.0, 1.0))  # Smaller chart
-    ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
+    fig, ax = plt.subplots(figsize=(1.0, 1.0))  # very small chart
+    wedges, texts, autotexts = ax.pie(
+        values,
+        labels=labels,
+        autopct='%1.1f%%',
+        startangle=90,
+        textprops={'fontsize': 6}  # smaller font for labels
+    )
+    for autotext in autotexts:
+        autotext.set_fontsize(6)  # smaller font for percentages
     ax.axis('equal')
     st.pyplot(fig)
 
@@ -69,9 +77,9 @@ left, right = st.columns(2)
 if calc_type == "SIP":
     with left:
         st.subheader("📈 SIP Calculator")
-        mi = st.number_input("Monthly Investment (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        mi = st.number_input("Monthly Investment (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter amount")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter %")
+        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter years")
         calculate = st.button("Calculate SIP")
 
     with right:
@@ -108,10 +116,10 @@ if calc_type == "SIP":
 elif calc_type == "SWP":
     with left:
         st.subheader("📉 SWP Calculator")
-        ia = st.number_input("Initial Investment (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        mw = st.number_input("Monthly Withdrawal (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        years = st.number_input("Withdrawal Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        ia = st.number_input("Initial Investment (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter amount")
+        mw = st.number_input("Monthly Withdrawal (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter amount")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter %")
+        years = st.number_input("Withdrawal Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter years")
         calculate = st.button("Calculate SWP")
 
     with right:
@@ -148,9 +156,9 @@ elif calc_type == "SWP":
 else:
     with left:
         st.subheader("💼 Lump Sum Calculator")
-        principal = st.number_input("Principal Amount (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        principal = st.number_input("Principal Amount (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter amount")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter %")
+        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter years")
         calculate = st.button("Calculate Lump Sum")
 
     with right:
@@ -189,4 +197,3 @@ st.markdown('</div>', unsafe_allow_html=True)
 # Footer
 st.markdown("---")
 st.caption("Built with ❤️ by BusyBeingMe")
-
