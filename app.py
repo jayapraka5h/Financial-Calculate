@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as st 
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -39,7 +39,7 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(1.0, 1.0))  # Smaller pie chart
+    fig, ax = plt.subplots(figsize=(1.0, 1.0))  # Small pie chart
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')
     st.pyplot(fig)
@@ -49,7 +49,7 @@ def pie_chart(labels, values):
 
 st.set_page_config(page_title="Financial Calculator", layout="wide")
 
-# Inject CSS for equal-height columns
+# CSS for equal-height columns
 st.markdown("""
     <style>
     .equal-height {
@@ -67,7 +67,7 @@ st.markdown("<h1 style='text-align: center;'>💸 Financial Calculator</h1>", un
 
 calc_type = st.radio("Choose Calculator", ["SIP", "SWP", "Lump Sum"], horizontal=True)
 
-# Begin equal-height layout
+# Layout
 st.markdown('<div class="equal-height">', unsafe_allow_html=True)
 left, right = st.columns(2)
 
@@ -76,9 +76,9 @@ left, right = st.columns(2)
 if calc_type == "SIP":
     with left:
         st.subheader("📈 SIP Calculator")
-        mi = st.number_input("Monthly Investment (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        mi = st.number_input("Monthly Investment (₹)", min_value=0.0, step=0.01, format="%.2f")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f")
+        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
         calculate = st.button("Calculate SIP")
 
     with right:
@@ -116,10 +116,10 @@ if calc_type == "SIP":
 elif calc_type == "SWP":
     with left:
         st.subheader("📉 SWP Calculator")
-        ia = st.number_input("Initial Investment (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        mw = st.number_input("Monthly Withdrawal (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        years = st.number_input("Withdrawal Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        ia = st.number_input("Initial Investment (₹)", min_value=0.0, step=0.01, format="%.2f")
+        mw = st.number_input("Monthly Withdrawal (₹)", min_value=0.0, step=0.01, format="%.2f")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f")
+        years = st.number_input("Withdrawal Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
         calculate = st.button("Calculate SWP")
 
     with right:
@@ -157,9 +157,9 @@ elif calc_type == "SWP":
 else:
     with left:
         st.subheader("💼 Lump Sum Calculator")
-        principal = st.number_input("Principal Amount (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
-        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        principal = st.number_input("Principal Amount (₹)", min_value=0.0, step=0.01, format="%.2f")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f")
+        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f")
         calculate = st.button("Calculate Lump Sum")
 
     with right:
