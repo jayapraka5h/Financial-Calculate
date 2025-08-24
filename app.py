@@ -41,15 +41,15 @@ def pie_chart(labels, values):
         labels=labels,
         autopct='%1.1f%%',
         startangle=90,
-        textprops={'fontsize': 12},       # Controls label font size
-        pctdistance=0.6                   # Moves percentage labels inward
+        textprops={'fontsize': 8},       # Controls label font size
+        pctdistance=0.3                   # Moves percentage labels inward
     )
 
     # Optional: fine-tune font size manually
     for text in texts:
-        text.set_fontsize(12)             # Label font size
+        text.set_fontsize(8)             # Label font size
     for autotext in autotexts:
-        autotext.set_fontsize(12)         # Percentage font size
+        autotext.set_fontsize(3)         # Percentage font size
 
     ax.axis('equal')
     st.pyplot(fig)
@@ -204,4 +204,5 @@ st.markdown('</div>', unsafe_allow_html=True)
 # Footer
 st.markdown("---")
 st.caption("Built with ❤️ by BusyBeingMe")
+
 
