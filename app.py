@@ -34,7 +34,7 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(3, 3))  # Smaller chart
+    fig, ax = plt.subplots(figsize=(2.5, 2.5))  # Smaller chart
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')
     st.pyplot(fig)
@@ -69,21 +69,20 @@ left, right = st.columns(2)
 if calc_type == "SIP":
     with left:
         st.subheader("📈 SIP Calculator")
-        mi = st.text_input("Monthly Investment (₹)", "")
-        rate = st.text_input("Expected Annual Return (%)", "")
-        years = st.text_input("Investment Duration (Years)", "")
+        mi = st.number_input("Monthly Investment (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
         calculate = st.button("Calculate SIP")
 
     with right:
         st.subheader("📊 SIP Breakdown")
         chart_placeholder = st.empty()
-        if calculate and mi and rate and years:
-            mi, rate, years = float(mi), float(rate), float(years)
+        if calculate:
             invested, returns, total = calculate_sip(mi, rate, years)
             with chart_placeholder:
                 pie_chart(["Invested", "Returns"], [invested, returns])
 
-    if calculate and mi and rate and years:
+    if calculate:
         st.markdown("### 📋 Results Summary")
         df = pd.DataFrame({
             "Description": [
@@ -109,22 +108,21 @@ if calc_type == "SIP":
 elif calc_type == "SWP":
     with left:
         st.subheader("📉 SWP Calculator")
-        ia = st.text_input("Initial Investment (₹)", "")
-        mw = st.text_input("Monthly Withdrawal (₹)", "")
-        rate = st.text_input("Expected Annual Return (%)", "")
-        years = st.text_input("Withdrawal Duration (Years)", "")
+        ia = st.number_input("Initial Investment (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        mw = st.number_input("Monthly Withdrawal (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        years = st.number_input("Withdrawal Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
         calculate = st.button("Calculate SWP")
 
     with right:
         st.subheader("📊 SWP Breakdown")
         chart_placeholder = st.empty()
-        if calculate and ia and mw and rate and years:
-            ia, mw, rate, years = float(ia), float(mw), float(rate), float(years)
+        if calculate:
             withdrawn, balance = calculate_swp(ia, mw, rate, years)
             with chart_placeholder:
                 pie_chart(["Withdrawn", "Remaining"], [withdrawn, balance])
 
-    if calculate and ia and mw and rate and years:
+    if calculate:
         st.markdown("### 📋 Results Summary")
         df = pd.DataFrame({
             "Description": [
@@ -150,21 +148,20 @@ elif calc_type == "SWP":
 else:
     with left:
         st.subheader("💼 Lump Sum Calculator")
-        principal = st.text_input("Principal Amount (₹)", "")
-        rate = st.text_input("Expected Annual Return (%)", "")
-        years = st.text_input("Investment Duration (Years)", "")
+        principal = st.number_input("Principal Amount (₹)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        rate = st.number_input("Expected Annual Return (%)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
+        years = st.number_input("Investment Duration (Years)", min_value=0.0, step=0.01, format="%.2f", placeholder="Enter number")
         calculate = st.button("Calculate Lump Sum")
 
     with right:
         st.subheader("📊 Lump Sum Breakdown")
         chart_placeholder = st.empty()
-        if calculate and principal and rate and years:
-            principal, rate, years = float(principal), float(rate), float(years)
+        if calculate:
             invested, returns, total = calculate_lump_sum(principal, rate, years)
             with chart_placeholder:
                 pie_chart(["Invested", "Returns"], [invested, returns])
 
-    if calculate and principal and rate and years:
+    if calculate:
         st.markdown("### 📋 Results Summary")
         df = pd.DataFrame({
             "Description": [
