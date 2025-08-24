@@ -31,12 +31,12 @@ def calculate_lump_sum(principal, annual_rate, years):
     returns = future_value - principal
     return round(principal, 2), round(returns, 2), round(future_value, 2)
 
-# ------------------ Advanced Pie Chart ------------------
+# ------------------ Groww-Style Pie Chart ------------------
 
 def pie_chart(labels, values):
     fig, ax = plt.subplots(figsize=(0.8, 0.8))  # Compact chart
 
-    colors = ['#4CAF50', '#FFC107']  # Invested = green, Returns = amber
+    colors = ['#1976D2', '#4CAF50']  # Blue for Invested, Green for Returns
 
     wedges, texts, autotexts = ax.pie(
         values,
@@ -44,24 +44,19 @@ def pie_chart(labels, values):
         autopct='%1.1f%%',
         startangle=90,
         colors=colors,
-        shadow=True,
-        textprops={'fontsize': 8},
-        pctdistance=0.55,
-        labeldistance=0.4
+        textprops={'fontsize': 6},
+        pctdistance=0.5,
+        labeldistance=0.35
     )
 
     for text in texts:
-        text.set_fontsize(8)
+        text.set_fontsize(6)
     for autotext in autotexts:
-        autotext.set_fontsize(8)
+        autotext.set_fontsize(6)
 
-    # Donut-style center
+    # Donut-style center (no label)
     centre_circle = plt.Circle((0, 0), 0.50, fc='white')
     fig.gca().add_artist(centre_circle)
-
-    # Center label showing total
-    total = sum(values)
-    ax.text(0, 0, f"₹{total:,.0f}", ha='center', va='center', fontsize=9, weight='bold')
 
     ax.axis('equal')
     st.pyplot(fig)
