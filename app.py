@@ -34,7 +34,7 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(4, 4))  # Balanced size
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')
     st.pyplot(fig)
@@ -44,11 +44,9 @@ def pie_chart(labels, values):
 st.set_page_config(page_title="Financial Calculator", layout="wide")
 st.markdown("<h1 style='text-align: center;'>💸 Financial Calculator</h1>", unsafe_allow_html=True)
 
-# Calculator Selection
 calc_type = st.radio("Choose Calculator", ["SIP", "SWP", "Lump Sum"], horizontal=True)
 
-# Layout: Left (Inputs) | Right (Chart)
-left, right = st.columns(2)
+left, right = st.columns([1, 1])  # Equal width layout
 
 # ------------------ SIP ------------------
 if calc_type == "SIP":
