@@ -34,14 +34,23 @@ def calculate_lump_sum(principal, annual_rate, years):
 # ------------------ Chart Generator ------------------
 
 def pie_chart(labels, values):
-    fig, ax = plt.subplots(figsize=(4, 4))  # balanced size
+    fig, ax = plt.subplots(figsize=(3.2, 3.2))  # smaller & balanced
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
-    ax.axis('equal')  # keep circle shape
+    ax.axis('equal')  # circular chart
     st.pyplot(fig)
 
 # ------------------ Streamlit UI ------------------
 
 st.set_page_config(page_title="Financial Calculator", layout="wide")
+
+# Reduce extra spacing under radio buttons
+st.markdown("""
+    <style>
+    div[role=radiogroup] {
+        margin-bottom: -20px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 st.markdown("<h1 style='text-align: center;'>💸 Financial Calculator</h1>", unsafe_allow_html=True)
 
